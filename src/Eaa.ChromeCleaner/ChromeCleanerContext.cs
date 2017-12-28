@@ -24,6 +24,7 @@ namespace Eaa.ChromeCleaner
 
         private MenuItem[] _intervalMenuItems = null;
 
+        private AboutForm _aboutForm;
         private int _currentInteval;
         private readonly NotifyIcon _trayIcon;
         private System.Threading.Timer _timer;
@@ -38,9 +39,11 @@ namespace Eaa.ChromeCleaner
             _trayIcon = new NotifyIcon()
             {
                 Icon = Resources.AppIcon,
-                ContextMenu = new ContextMenu(new MenuItem[] 
+                ContextMenu = new ContextMenu(new MenuItem[]
                 {
                     new MenuItem("Clean Interval", _intervalMenuItems),
+                    new MenuItem("About", OnAbout),
+                    new MenuItem("-"),
                     new MenuItem("Exit", OnExit)
                 }),
                 Visible = true
@@ -89,6 +92,16 @@ namespace Eaa.ChromeCleaner
         private void SetTimer()
         {
             _timer = new System.Threading.Timer(state => CleanChromeInstances(), null, _currentInteval, Timeout.Infinite);
+        }
+
+        private void OnAbout(object sneder, EventArgs e)
+        {
+            if (_aboutForm == null)
+            {
+                _aboutForm = new AboutForm();
+            }
+
+            _aboutForm.ShowDialog();
         }
 
         private void OnExit(object sender, EventArgs e)
